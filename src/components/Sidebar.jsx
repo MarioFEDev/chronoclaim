@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Shield, Home, Users, AlertTriangle, DollarSign, TrendingUp, Building2, User, FileText, LogOut } from 'lucide-react';
+import { Shield, Home, Users, AlertTriangle, DollarSign, TrendingUp, Building2, User, FileText, LogOut, Menu, X } from 'lucide-react';
 import { Separator } from './ui/separator';
 
 export default function Sidebar({ role }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const roleConfigs = {
     employer: {
       title: 'Private Guard Company',
@@ -33,57 +36,83 @@ export default function Sidebar({ role }) {
   const config = roleConfigs[role] || roleConfigs.personnel;
 
   return (
-    <div className="w-64 bg-slate-900 text-white h-screen fixed left-0 top-0 flex flex-col">
-      {/* Logo/Brand */}
-      <div className="p-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-cyan-400 rounded-lg">
-            <Shield className="w-6 h-6 text-slate-900" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold">ChronoClaim</h1>
-            <p className="text-xs text-slate-400">{config.title}</p>
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-900 text-white rounded-lg"
+      >
+        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+      </button>
+
+      {/* Overlay for mobile */}
+      {isOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/50 z-30"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`
+          w-64 bg-slate-900 text-white h-screen fixed left-0 top-0 flex flex-col z-40 transition-transform duration-300
+          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}
+      >
+        {/* Logo/Brand */}
+        <div className="p-4 lg:p-6">
+          <div className="flex items-center gap-2 lg:gap-3">
+            <div className="p-1.5 lg:p-2 bg-cyan-400 rounded-lg flex-shrink-0">
+              <Shield className="w-5 h-5 lg:w-6 lg:h-6 text-slate-900" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-lg lg:text-xl font-bold truncate">ChronoClaim</h1>
+              <p className="text-xs text-slate-400 truncate">{config.title}</p>
+            </div>
           </div>
         </div>
+
+        <Separator className="bg-slate-700" />
+
+        {/* Navigation */}
+        <nav className="flex-1 px-3 lg:px-4 py-4 lg:py-6 space-y-1 lg:space-y-2 overflow-y-auto">
+          {config.routes.map((route) => {
+            const Icon = route.icon;
+            return (
+              <NavLink
+                key={route.path}
+                to={route.path}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg transition-all text-sm lg:text-base ${
+                    isActive
+                      ? 'bg-cyan-400 text-slate-900 font-semibold'
+                      : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  }`
+                }
+              >
+                <Icon className="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0" />
+                <span className="truncate">{route.label}</span>
+              </NavLink>
+            );
+          })}
+        </nav>
+
+        <Separator className="bg-slate-700" />
+
+        {/* Footer */}
+        <div className="p-3 lg:p-4">
+          <NavLink
+            to="/"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-all text-sm lg:text-base"
+          >
+            <LogOut className="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0" />
+            <span className="truncate">Switch Role</span>
+          </NavLink>
+        </div>
       </div>
-
-      <Separator className="bg-slate-700" />
-
-      {/* Navigation */}
-      <nav className="flex-1 px-4 py-6 space-y-2">
-        {config.routes.map((route) => {
-          const Icon = route.icon;
-          return (
-            <NavLink
-              key={route.path}
-              to={route.path}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                  isActive
-                    ? 'bg-cyan-400 text-slate-900 font-semibold'
-                    : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                }`
-              }
-            >
-              <Icon className="w-5 h-5" />
-              <span>{route.label}</span>
-            </NavLink>
-          );
-        })}
-      </nav>
-
-      <Separator className="bg-slate-700" />
-
-      {/* Footer */}
-      <div className="p-4">
-        <NavLink
-          to="/"
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-all"
-        >
-          <LogOut className="w-5 h-5" />
-          <span>Switch Role</span>
-        </NavLink>
-      </div>
-    </div>
+    </>
   );
 }

@@ -31,9 +31,9 @@ export default function CommandCenter() {
       title="Command Center"
       subtitle="Operational overview and guard monitoring"
     >
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-5 lg:space-y-6">
         {/* Top Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           <MetricCard
             title="Total Active Guards Today"
             value={activeGuards}
@@ -64,20 +64,20 @@ export default function CommandCenter() {
         </div>
 
         {/* Biometric Sync Control */}
-        <Card className="p-6 rounded-2xl shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-1">
+        <Card className="p-4 sm:p-5 lg:p-6 rounded-xl lg:rounded-2xl shadow-sm border border-slate-200">
+          <div className="flex items-start sm:items-center justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-1">
                 Biometric Sync Active Today
               </h3>
-              <p className="text-sm text-slate-600">
+              <p className="text-xs sm:text-sm text-slate-600">
                 Real-time attendance tracking via NSCDC-compliant biometric system
               </p>
             </div>
             <Switch
               checked={biometricSyncActive}
               onCheckedChange={setBiometricSyncActive}
-              className="data-[state=checked]:bg-emerald-600"
+              className="data-[state=checked]:bg-emerald-600 flex-shrink-0"
             />
           </div>
           {!biometricSyncActive && (
@@ -92,21 +92,21 @@ export default function CommandCenter() {
         </Card>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
           {/* Left: Activity Timeline */}
           <div className="lg:col-span-2">
-            <Card className="p-6 rounded-2xl shadow-sm border border-slate-200">
-              <h3 className="text-lg font-semibold text-slate-900 mb-4">
+            <Card className="p-4 sm:p-5 lg:p-6 rounded-xl lg:rounded-2xl shadow-sm border border-slate-200">
+              <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">
                 Activity Timeline
               </h3>
-              <ScrollArea className="h-[600px] pr-4">
+              <ScrollArea className="h-[400px] sm:h-[500px] lg:h-[600px] pr-2 sm:pr-4">
                 <EventTimeline events={events} />
               </ScrollArea>
             </Card>
           </div>
 
           {/* Right: Alert Feed & Compliance */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-5 lg:space-y-6">
             {/* Compliance Status */}
             <ComplianceIndicator 
               isCompliant={true}
@@ -114,12 +114,12 @@ export default function CommandCenter() {
             />
 
             {/* Conflict Correlation Alerts */}
-            <Card className="p-6 rounded-2xl shadow-sm border border-rose-200 bg-rose-50">
-              <h3 className="text-lg font-semibold text-rose-900 mb-4 flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5" />
-                Conflict Correlation Alerts
+            <Card className="p-4 sm:p-5 lg:p-6 rounded-xl lg:rounded-2xl shadow-sm border border-rose-200 bg-rose-50">
+              <h3 className="text-base sm:text-lg font-semibold text-rose-900 mb-3 sm:mb-4 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="truncate">Conflict Correlation Alerts</span>
               </h3>
-              <ScrollArea className="h-[400px] pr-4">
+              <ScrollArea className="h-[300px] sm:h-[350px] lg:h-[400px] pr-2 sm:pr-4">
                 <div className="space-y-3">
                   {correlatedAlerts.map((alert) => (
                     <Alert key={alert.id} className="border-rose-200 bg-white">
